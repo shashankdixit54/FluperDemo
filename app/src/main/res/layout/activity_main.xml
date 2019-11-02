@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.MainActivity">
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical"
+        android:padding="@dimen/ten_dp"
+        android:layout_alignParentTop="true"
+        android:text="@string/product_application"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/twenty_sp" />
+
+
+    <Button
+        android:id="@+id/btnCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/fifteen_dp"
+        android:paddingStart="@dimen/ten_dp"
+        android:paddingEnd="@dimen/ten_dp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/style_button"
+        android:text="@string/create_product"
+        />
+
+    <Button
+        android:id="@+id/btnShow"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/btnCreate"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/ten_dp"
+        android:paddingEnd="@dimen/ten_dp"
+        android:textColor="@android:color/white"
+        android:background="@drawable/style_button"
+        android:text="@string/show_product"
+        />
+
+</RelativeLayout>

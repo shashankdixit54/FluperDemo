@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">FluperDemo</string>
+    <string name="create_product">Create Product</string>
+    <string name="update_product">Update Product</string>
+    <string name="show_product">Show Product</string>
+    <string name="product_application">Product Application</string>
+    <string name="update">Update</string>
+    <string name="submit">Submit</string>
+    <string name="product_inserted">Product inserted Successfully</string>
+    <string name="product_updated">Product Updated Successfully</string>
+    <string name="empty_field">Field cannot be empty</string>
+    <string name="product_id">Product Id</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="regular_price">Regular Price</string>
+    <string name="sale_price">Sale Price</string>
+    <string name="add_colors">Add Colors</string>
+    <string name="add_stores">Add Stores</string>
+    <string name="product_photo">Product Photo</string>
+    <string name="click_above_to_pick_image">Click above to pick image</string>
+    <string name="insert_product">Insert Product</string>
+    <string name="reset">Reset</string>
+    <string name="product_detail">Product Detail</string>
+    <string name="id">ID</string>
+    <string name="colors">Colors</string>
+    <string name="stores">Stores</string>
+    <string name="delete">Delete</string>
+    <string name="product_deleted">Product deleted from list successfully</string>
+    <string name="enter_store_detail">Enter Store Detail</string>
+    <string name="store_name">Store Name</string>
+    <string name="store_address">Store Address</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+</resources>
