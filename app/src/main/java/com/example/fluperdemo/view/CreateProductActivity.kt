@@ -6,7 +6,6 @@ import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -19,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.fluperdemo.Constant
 import com.example.fluperdemo.R
+import androidx.lifecycle.Observer
 import com.example.fluperdemo.adapter.ColorSpinnerAdapter
 import com.example.fluperdemo.model.Product
 import com.example.fluperdemo.model.SpinnerStateModel
@@ -26,15 +26,14 @@ import com.example.fluperdemo.model.StoresModel
 import com.example.fluperdemo.viewmodel.ProductViewModel
 import java.io.File
 import java.util.*
-
-
-
+import kotlin.collections.ArrayList
 
 
 class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var colorSpinner: Spinner
-    private val listOfColor = arrayOf("Black", "Green", "Red", "White", "Yellow", "Orange", "Purple")
+    private val listOfColor =
+        arrayOf("Black", "Green", "Red", "White", "Yellow", "Orange", "Purple")
     private lateinit var productIdEt: EditText
     private lateinit var nameEt: EditText
     private lateinit var descriptionEt: EditText
@@ -53,12 +52,17 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var tvAddedStores: TextView
     private lateinit var ivAddStore: ImageView
     private lateinit var tvHeader: TextView
+    private lateinit var productList: ArrayList<Product>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_product)
 
         productViewModel = ViewModelProvider(this).get(ProductViewModel::class.java)
+        productViewModel.allProducts.observe(this, Observer { products ->
+
+            productList = products as ArrayList<Product>
+        })
 
         colorSpinner = findViewById<Spinner>(R.id.spinnerColor)
         productIdEt = findViewById<EditText>(R.id.etProductId)
@@ -71,7 +75,7 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
         tvAddedStores = findViewById<TextView>(R.id.tvAddedStores)
         ivAddStore = findViewById<ImageView>(R.id.addStoreImageView)
         resetBtn = findViewById<Button>(R.id.btnReset)
-        tvHeader  = findViewById<TextView>(R.id.headerTvCreateProduct)
+        tvHeader = findViewById<TextView>(R.id.headerTvCreateProduct)
         submitBtn.setOnClickListener(this)
         resetBtn.setOnClickListener(this)
         productIv.setOnClickListener(this)
@@ -88,7 +92,7 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
             tvHeader.text = getString(R.string.update_product)
         } else {
             val randomId = generateRandomId()
-            Log.e("Random Id ",randomId.toString())
+            Log.e("Random Id ", randomId.toString())
             submitBtn.setText(getString(R.string.submit))
             resetBtn.visibility = View.VISIBLE
             //productIdEt.setText(randomId.toString())
@@ -118,7 +122,8 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
 
         val storeString: StringBuffer = StringBuffer()
         for (i in 0 until storeslist.size) {
-            storeString.append(storeslist[i].storeName).append("\n").append(storeslist[i].storeAddress).append("\n\n")
+            storeString.append(storeslist[i].storeName).append("\n")
+                .append(storeslist[i].storeAddress).append("\n\n")
         }
         tvAddedStores.text = storeString.toString()
 
@@ -136,20 +141,20 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
     private fun setColorAdapter() {
         val list = arrayListOf<SpinnerStateModel>()
         for (x in 0 until listOfColor.size) {
-            if (colorlist.size>0){
+            if (colorlist.size > 0) {
                 for (i in 0 until colorlist.size) {
                     if (colorlist[i].equals(listOfColor[x])) {
                         val s = SpinnerStateModel(listOfColor[x], true)
                         list.add(s)
                         break
-                    }else{
+                    } else {
                         val s = SpinnerStateModel(listOfColor[x], false)
                         list.add(s)
                         break
                     }
 
                 }
-            }else{
+            } else {
                 val s = SpinnerStateModel(listOfColor[x], false)
                 list.add(s)
             }
@@ -240,20 +245,36 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
 
                     if (intent.getStringExtra(Constant.selection) == Constant.updatePage) {
                         productViewModel.update(
-                          product
+                            product
                         )
                         Toast.makeText(
                             this@CreateProductActivity,
                             getString(R.string.product_updated), Toast.LENGTH_LONG
                         ).show()
                     } else {
-                        productViewModel.insert(product)
-                        Toast.makeText(
-                            this@CreateProductActivity,
-                            getString(R.string.product_inserted), Toast.LENGTH_LONG
-                        ).show()
+
+                        var isExist = false
+                        for(i in 0 until productList.size){
+                            if(productList[i].id == productIdEt.text.toString().toInt()){
+                                isExist = true
+                            }
+                        }
+                        if (isExist){
+                            Toast.makeText(
+                                this@CreateProductActivity,
+                                getString(R.string.product_id_exist), Toast.LENGTH_LONG
+                            ).show()
+                        }else{
+                            productViewModel.insert(product)
+                            Toast.makeText(
+                                this@CreateProductActivity,
+                                getString(R.string.product_inserted), Toast.LENGTH_LONG
+                            ).show()
+                            finish()
+                        }
+
                     }
-                    finish()
+
                 }
             }
             resetBtn.id -> {
@@ -345,7 +366,7 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun generateRandomId():Int{
+    private fun generateRandomId(): Int {
         val r = Random()
         val i1 = r.nextInt(10000 - 1) + 1
         return i1
