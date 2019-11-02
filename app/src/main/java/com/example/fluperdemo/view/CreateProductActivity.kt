@@ -251,6 +251,7 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
                             this@CreateProductActivity,
                             getString(R.string.product_updated), Toast.LENGTH_LONG
                         ).show()
+                        finish()
                     } else {
 
                         var isExist = false
