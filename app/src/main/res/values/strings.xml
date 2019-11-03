@@ -33,4 +33,5 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="product_id_exist">Product Id already exist, please change id</string>
+    <string name="select_pic_from_memory">Please select image from gallery or phone memory</string>
 </resources>

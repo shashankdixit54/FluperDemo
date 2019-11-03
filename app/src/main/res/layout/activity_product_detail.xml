@@ -31,12 +31,20 @@
             android:orientation="vertical"
            >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/five_dp"
+            android:layout_marginTop="@dimen/five_dp"
+            android:background="@drawable/style_border"
+            android:orientation="vertical">
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/hundred_dp"
-                android:scaleType="fitXY"
-                android:layout_marginTop="@dimen/five_dp"
-                android:id="@+id/ivProductDetail"/>
+                android:id="@+id/ivProductDetail"
+                android:layout_width="@dimen/one_fifty_dp"
+                android:layout_height="@dimen/one_fifty_dp"
+                android:scaleType="fitXY" />
+        </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

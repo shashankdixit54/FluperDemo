@@ -194,6 +194,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/five_dp"
                     android:layout_marginEnd="@dimen/five_dp"
+                    android:prompt="@string/add_colors"
                     android:background="@drawable/style_border"
                     android:padding="@dimen/five_dp" />
 
@@ -219,6 +220,7 @@
                         android:layout_weight="1"
                         android:padding="@dimen/five_dp"
                         android:text="@string/add_stores"
+                        android:id="@+id/addStoreHeadingTv"
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/fourteen_sp" />
 

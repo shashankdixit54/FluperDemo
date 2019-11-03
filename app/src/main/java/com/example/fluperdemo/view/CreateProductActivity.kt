@@ -50,6 +50,7 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
     private var storeslist = arrayListOf<StoresModel>()
     private var colorlist = arrayListOf<String>()
     private lateinit var tvAddedStores: TextView
+    private lateinit var tvAddStoreHeading : TextView
     private lateinit var ivAddStore: ImageView
     private lateinit var tvHeader: TextView
     private lateinit var productList: ArrayList<Product>
@@ -73,6 +74,7 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
         productIv = findViewById<ImageView>(R.id.ivProduct)
         submitBtn = findViewById<Button>(R.id.btnInsertData)
         tvAddedStores = findViewById<TextView>(R.id.tvAddedStores)
+        tvAddStoreHeading = findViewById<TextView>(R.id.addStoreHeadingTv)
         ivAddStore = findViewById<ImageView>(R.id.addStoreImageView)
         resetBtn = findViewById<Button>(R.id.btnReset)
         tvHeader = findViewById<TextView>(R.id.headerTvCreateProduct)
@@ -80,6 +82,7 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
         resetBtn.setOnClickListener(this)
         productIv.setOnClickListener(this)
         ivAddStore.setOnClickListener(this)
+        tvAddStoreHeading.setOnClickListener(this)
 
 
         if (intent.getStringExtra(Constant.selection).equals(Constant.updatePage)) {
@@ -91,12 +94,8 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
             productIdEt.isEnabled = false
             tvHeader.text = getString(R.string.update_product)
         } else {
-            val randomId = generateRandomId()
-            Log.e("Random Id ", randomId.toString())
             submitBtn.setText(getString(R.string.submit))
             resetBtn.visibility = View.VISIBLE
-            //productIdEt.setText(randomId.toString())
-            //productIdEt.isEnabled = false
             tvHeader.text = getString(R.string.create_product)
             setColorAdapter()
         }
@@ -142,17 +141,12 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
         val list = arrayListOf<SpinnerStateModel>()
         for (x in 0 until listOfColor.size) {
             if (colorlist.size > 0) {
-                for (i in 0 until colorlist.size) {
-                    if (colorlist[i].equals(listOfColor[x])) {
-                        val s = SpinnerStateModel(listOfColor[x], true)
-                        list.add(s)
-                        break
-                    } else {
-                        val s = SpinnerStateModel(listOfColor[x], false)
-                        list.add(s)
-                        break
-                    }
-
+                if (colorlist.contains(listOfColor[x])){
+                    val s = SpinnerStateModel(listOfColor[x], true)
+                    list.add(s)
+                }else{
+                    val s = SpinnerStateModel(listOfColor[x], false)
+                    list.add(s)
                 }
             } else {
                 val s = SpinnerStateModel(listOfColor[x], false)
@@ -183,12 +177,20 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
             val picturePath = cursor.getString(columnIndex)
             cursor.close()
 
-            photoUri = picturePath
-            val file = File(photoUri)
-            if (file.exists()) {
-                val bitmap = BitmapFactory.decodeFile(file.absolutePath);
-                productIv.setImageBitmap(bitmap)
+            if(null != picturePath) {
+                photoUri = picturePath
+                val file = File(photoUri)
+                if (file.exists()) {
+                    val bitmap = BitmapFactory.decodeFile(file.absolutePath);
+                    productIv.setImageBitmap(bitmap)
 
+                }
+            }else{
+                Toast.makeText(
+                    this@CreateProductActivity,
+                    getString(R.string.select_pic_from_memory),
+                    Toast.LENGTH_LONG
+                ).show()
             }
 
         } else if (resultCode == Activity.RESULT_OK && requestCode == MY_PERMISSIONS_REQUEST_READ_STORAGE && null != data) {
@@ -214,10 +216,19 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
                 // To take the store value selected from color spinner
                 for (i in 0 until colorAdapter.modelArrayList.size) {
                     if (colorAdapter.modelArrayList[i].selected) {
-                        colorlist.add(colorAdapter.modelArrayList[i].title)
+
+                        if (colorlist.size>0){
+                            if(!(colorlist.contains(colorAdapter.modelArrayList[i].title))) {
+                                colorlist.add(colorAdapter.modelArrayList[i].title)
+                            }
+                        }else{
+                            colorlist.add(colorAdapter.modelArrayList[i].title)
+                        }
+
                     }
                 }
 
+                // Checking all empty fields
                 if (productIdEt.text.isEmpty() || nameEt.text.isEmpty() || descriptionEt.text.isEmpty()
                     || regularPriceEt.text.isEmpty() || salePriceEt.text.isEmpty()
                     || colorlist.size <= 0 || storeslist.size <= 0 || photoUri.isEmpty()
@@ -306,6 +317,9 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
             ivAddStore.id -> {
                 showDialog()
             }
+            tvAddStoreHeading.id ->{
+                showDialog()
+            }
             else -> {
                 print("Do nothing")
             }
@@ -367,9 +381,4 @@ class CreateProductActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun generateRandomId(): Int {
-        val r = Random()
-        val i1 = r.nextInt(10000 - 1) + 1
-        return i1
-    }
 }
